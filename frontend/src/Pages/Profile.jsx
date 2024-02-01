@@ -9,7 +9,7 @@ export default function Profile() {
   const token = localStorage.getItem("token");
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/v1/user/profile", {
+      .get("https://paytm-clone.onrender.com/api/v1/user/profile", {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -26,7 +26,7 @@ export default function Profile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/v1/account/balance", {
+      .get("https://paytm-clone.onrender.com/api/v1/account/balance", {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -41,7 +41,7 @@ export default function Profile() {
   function handleSubmit(e) {
     e.preventDefault();
     axios.put(
-      "http://localhost:3000/api/v1/user",
+      "https://paytm-clone.onrender.com/api/v1/user",
       { password },
       {
         headers: {

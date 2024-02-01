@@ -10,7 +10,7 @@ export default function Dashboard() {
   }
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/v1/account/balance", {
+      .get("https://paytm-clone.onrender.com/api/v1/account/balance", {
         headers: {
           Authorization: "Bearer " + token,
         },

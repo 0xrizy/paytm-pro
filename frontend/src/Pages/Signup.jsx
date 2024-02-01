@@ -22,7 +22,7 @@ export default function Signup() {
     e.preventDefault();
     console.log("Form data submitted:", formData);
     await axios
-      .post("http://localhost:3000/api/v1/user/signup", formData)
+      .post("https://paytm-clone.onrender.com/api/v1/user/signup", formData)
       .then((res) => {
         console.log(res.data);
         const token = res.data.token;

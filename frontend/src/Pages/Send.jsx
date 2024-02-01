@@ -14,7 +14,7 @@ export default function Send() {
   const token = localStorage.getItem("token");
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/v1/account/balance", {
+      .get("https://paytm-clone.onrender.com/api/v1/account/balance", {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -32,7 +32,7 @@ export default function Send() {
   const handleClick = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/user/bulk",
+        "https://paytm-clone.onrender.com/api/v1/user/bulk",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -65,7 +65,7 @@ export default function Send() {
   const sendTransaction = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/api/v1/account/transact",
+        "https://paytm-clone.onrender.com/api/v1/account/transact",
         { amount: parseFloat(amountToSend), to: selectedFriend?._id },
         {
           headers: {
