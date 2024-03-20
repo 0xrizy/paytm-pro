@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Oval } from "react-loader-spinner";
 
 export default function Dashboard() {
   const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
   if (!token) {
     return <div> Invalid token, Please Logout and Login again</div>;
   }
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://paytm-clone.onrender.com/api/v1/account/balance", {
         headers: {
@@ -19,9 +22,12 @@ export default function Dashboard() {
         const bal = res.data.balance;
         const newBal = Math.round(bal * 100) / 100;
         setBalance(newBal);
+        setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        https://paytm-clone.onrender.com(err);
+        setLoading(false);
+        alert("Something Went Wrong, please Login Again \n" + err);
       });
   }, []);
 
@@ -36,9 +42,24 @@ export default function Dashboard() {
         <div className="mt-4 md:mt-0">
           <h2 className="mb-4 text-2xl tracking-tight font-extrabold text-gray-900 ">
             Your Current Balance is <br />
-            <span className="text-blue-600 font-extrabold text-lg  md:text-4xl">
-              <span className="text-sm md:text-4xl">₹</span> {balance}
-            </span>
+            {!loading ? (
+              <span className="text-blue-600 font-extrabold text-lg  md:text-4xl">
+                <span className="text-sm md:text-4xl">₹</span> {balance}
+              </span>
+            ) : (
+              <div className="mt-1 ml-10">
+                <Oval
+                  visible={true}
+                  height="30"
+                  width="30"
+                  color="blue"
+                  secondaryColor="blue"
+                  ariaLabel="oval-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              </div>
+            )}
           </h2>
           <p className="mb-6 font-light text-gray-500 md:text-lg ">
             Send money to anyone, instantly. No matter where it is.
@@ -65,7 +86,7 @@ export default function Dashboard() {
             className="inline-flex items-center mt-4 text-gray-700 bg-white border border-gray-400 hover:bg-gray-800 hover:text-white ml-4   focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
             to="/profile"
           >
-           Go to Profile
+            Go to Profile
           </Link>
         </div>
       </div>

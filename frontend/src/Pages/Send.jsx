@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import { Puff } from "react-loader-spinner";
 
 export default function Send() {
   const [friends, setFriends] = useState("");
@@ -9,6 +10,7 @@ export default function Send() {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amountToSend, setAmountToSend] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [balance, setBalance] = useState(0);
   const token = localStorage.getItem("token");
@@ -64,6 +66,7 @@ export default function Send() {
 
   const sendTransaction = async () => {
     try {
+      setLoading(true);
       await axios.post(
         "https://paytm-clone.onrender.com/api/v1/account/transact",
         { amount: parseFloat(amountToSend), to: selectedFriend?._id },
@@ -74,9 +77,11 @@ export default function Send() {
         }
       );
       alert("Success");
+      setLoading(false);
       setIsModalOpen(false);
     } catch (error) {
       console.error("Transaction failed:", error);
+      setLoading(false);
       alert(error.response.data.msg);
     }
   };
@@ -214,12 +219,18 @@ export default function Send() {
                 className="border border-gray-500 rounded-md p-1 mb-3"
               />
               <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button
-                  onClick={sendTransaction}
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Send
-                </button>
+                {loading ? (
+                  <button
+                    onClick={sendTransaction}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Send
+                  </button>
+                ) : (
+                  <div className="flex justify-center items-center ">
+                    <Puff color="#00BFFF" height={40} width={40} />
+                  </div>
+                )}
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"

@@ -5,7 +5,6 @@ import {isLoggedInAtom} from "../Recoil/Atoms/atom"
 export default function Home() {
 
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
-  console.log("🚀 ~ Home ~ isLoggedIn:", isLoggedIn)
   const [token, setToken] = useState();
 
   return (

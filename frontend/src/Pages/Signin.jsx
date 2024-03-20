@@ -4,16 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { isLoggedInAtom } from "../Recoil/Atoms/atom";
 import { Navigate } from "react-router-dom";
+import {  Puff } from "react-loader-spinner";
 export default function Signin() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
-  if(isLoggedIn){
-    return <Navigate to="/dashboard"/>
+  if (isLoggedIn) {
+    return <Navigate to="/dashboard" />;
   }
 
   const handleChange = (e) => {
@@ -26,6 +28,7 @@ export default function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     console.log("Form data submitted:", formData);
     await axios
       .post("https://paytm-clone.onrender.com/api/v1/user/signin", formData)
@@ -34,11 +37,15 @@ export default function Signin() {
         const token = res.data.token;
         localStorage.setItem("token", token);
         setIsLoggedIn(true);
+        setLoading(false);
         navigate("/dashboard");
       })
       .catch((err) => {
-        alert(err.response.data.msg)
+        alert(
+          "Something Went Wrong, Please Login Again\n" + err.response.data.msg
+        );
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -80,12 +87,18 @@ export default function Signin() {
           required
         />
       </div>
-      <button
-        type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center"
-      >
-        Submit
-      </button>
+      {!loading ?
+        <button
+          type="submit"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center"
+        >
+          Submit
+        </button>
+        :
+        <div className="flex justify-center">
+          <Puff color="gray" height={50} width={50} />
+        </div>
+      }
     </form>
   );
 }
